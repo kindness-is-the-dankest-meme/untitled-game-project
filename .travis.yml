@@ -1,0 +1,90 @@
+language: rust
+rust: stable
+
+cache:
+  cargo: true
+  directories:
+    # cache yarn
+    - $HOME/.cache/yarn
+
+    # cache npm
+    - $HOME/.npm
+    - node_modules
+    - $TRAVIS_BUILD_DIR/node_modules
+
+    # cache parcel
+    - $TRAVIS_BUILD_DIR/.cache
+
+env:
+  global:
+    - secure: YhGhaSJvAs+LiuyAgac9Hz4dvQZ5RZxu9WFMoKJwVkg62sMdlFhrrZFL+DCFF9HiMdAEIoa0mPWI1Z8Fs/NPuuhJvhXbuJpLC6NqP6HI/eEmQhyNKGE1FaH66N0kBPbBk53UK3EUw+QLw/XBf59Mfozc8uIbVS4wIoqatE3T3bWgwVJ3eAqIWKnd87+vpGF2hUfajtgscHZGVeJdjurLfbV7BKyDXROxnRp+TYDciaV3CzvKac8GnsfL3rdR7UrkzUdJuMS+dJKmrcqIYkTbkelV+31VvUPId//Zwzngj0JYD9bMBjuMwthPoGI9cIfl1ri4ChnoLgZxY5xoMspzjsmowuueXoNNPjYd10+8+GF33+SoW+VoGK1IpeuKhKB8nQpbTEznVSl0viyz72w37XuIR+kTc7XBsMCITKZZUo6gj9oGj65v/cnqDfXMiyNrNj3lLcv3//Y27DH5IZyKQh1sJS4soZwWfuumrT70y6dD76Z1z8zbmNqkDoDzbmL1oRmQdvw+vu8PtrZ623SMMK5JZKk9/JX2Uk3YnZgpKpiXvkpAPGO4X+GQvLXlMChDBcA0aHn6kth3PS/x51U/FlieQ7ijvAKG5MzW1NHdLBgWxEGEKBDFHrulvvG8k2b7SaG3hm1+hNqIZBPAXHsRgtXPogokHQSq9DbY54vnBTo=
+    - secure: j3CeVUe4413oENgpdL6mi/fJElNGoN8mScLv1YJLurVPfHdBTvUWLt8S3ohOTww5gUqGiE2yq7lz8ypTDfH2/tm2CYAIkUsVxqPyBksHmxEG77R76T0siyHM1tawQNqy10v0qvNvtJnRNwXeNf0qNO/fJnWF0cKn/YjlkU7oy+KzC6Yzko3EN7GXjsTVi0Fo2LLKDjY3cM6kffflZP2PIosAk91hIt3/lbXwWeZao0lyOgVLSDBOA2Iw9SarkZpFJEMkSZasstD6DaVaIwRQCV8o75JgZl93VjtlJou5nw9+fHHyPZDu4oao5q98nPHJ05Q9SQPunkGvbtcUjsEham8Pi5bZT4a4P9nSxaxb8m+FOYNm06wyxCdB+Sb1cBxc0BZGDpPzxhgpIMqm3O1A2wAXURMEW/5wYgVvNqtqJto2EUL3l9XxJP088BS+mqSxxj8QptR0okVkB5YEg82JAZEQnhh+DCv+BrfmO9ODB7jn4TZ66dbqN1Q7MMovkx+h7tO3Ubpl8TtYXyQfi+5P2bmlOtff/ldvO8eLpQxCUvDS1ARzti3hWTrF8jdVneLUsygY9ZOta1ctMRChTd6xSDGAvxVV4Gjq1yNsL3MEF9aaV16UsJqSW6ZEO9pjMLnZ5t4WmYUqShF0EvW8aU0izYqmUA/srzvj5cqIhpiPE1c=
+
+before_install:
+  # add node version, read from .nvmrc
+  - nvm install
+
+  # add components and targets
+  - rustup component add clippy
+  - rustup component add rustfmt
+  - rustup target add wasm32-unknown-unknown
+
+  # get wasm-pack, wasm-bindgen, install-update
+  - (test -x $HOME/.cargo/bin/wasm-pack || cargo install wasm-pack)
+  - (test -x $HOME/.cargo/bin/wasm-bindgen || cargo install wasm-bindgen-cli)
+  - (test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update)
+  - cargo install-update -a
+
+  # get the right npm version
+  - NPM_VERSION=`node -pe "require('./package.json').engines.npm"`
+  - if [ `npm --version` != "$NPM_VERSION" ]; then
+    npm install --global npm@${NPM_VERSION};
+    fi
+
+  # get the right yarn version
+  - YARN_VERSION=`node -pe "require('./package.json').engines.yarn"`
+  - if [ `yarn --version` != "$YARN_VERSION" ]; then
+    curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION;
+    export PATH=$HOME/.yarn/bin:$PATH;
+    fi
+
+  - yarn install
+
+before_script:
+  # code climate's coverage reporter
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+    > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - './cc-test-reporter before-build'
+
+script:
+  - yarn lint
+  - yarn test
+  - yarn build
+
+after_success:
+  - test $TRAVIS_PULL_REQUEST != "false" && npx semantic-release-github-pr
+
+deploy:
+  # deploy a git tag, release notes, bump package.json, update READMEs
+  - provider: script
+    skip_cleanup: true
+    script: npx semantic-release
+    on:
+      branch: master
+
+  # deploy the site
+  - provider: pages
+    repo: kindness-is-the-dankest-meme/untitled-game-project
+    target_branch: gh-pages
+    github_token: '$GH_TOKEN'
+    allow_empty_commit: true
+    skip_cleanup: true
+    keep_history: true
+    local_dir: dist/
+    on:
+      branch: master
+
+after_script:
+  # report coverage
+  - './cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT'
