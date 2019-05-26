@@ -1,2 +1,2 @@
-# untitled-game-project
-A web game collaboration between @GreySqwrl and @mysterycommand
+# Untitled Game Project
+> A web game collaboration between [@GreySqwrl](https://github.com/GreySqwrl) and [@mysterycommand](https://github.com/mysterycommand)
