@@ -1,0 +1,18 @@
+{
+  "name": "untitled-game-project",
+  "version": "1.0.0",
+  "description": "A web game collaboration between [@GreySqwrl](https://github.com/GreySqwrl) and [@mysterycommand](https://github.com/mysterycommand)",
+  "repository": "git@github.com:kindness-is-the-dankest-meme/untitled-game-project.git",
+  "author": "Matt Hayes <matt@mysterycommand.com>",
+  "license": "(MIT OR Apache-2.0)",
+  "private": true,
+  "engines": {
+    "node": "10.15.3",
+    "npm": "6.9.0",
+    "yarn": "1.16.0"
+  },
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {},
+  "config": {}
+}
