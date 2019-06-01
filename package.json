@@ -5,7 +5,7 @@
   "repository": "git@github.com:kindness-is-the-dankest-meme/untitled-game-project.git",
   "contributors": [
     "Matt Hayes <matt@mysterycommand.com>",
-    "Ben Pullen"
+    "Ben Pullen <bpullen@gmail.com>"
   ],
   "license": "(MIT OR Apache-2.0)",
   "private": true,
@@ -15,7 +15,7 @@
     "yarn": "1.16.0"
   },
   "scripts": {
-    "reset": "yarn clean node_modules/",
+    "reset": "yarn clean node_modules/ && yarn",
     "clean": "cargo clean && rm -rf .cache/ coverage/ dist/ pkg/",
     "start": "parcel src/index.html",
     "build": "parcel build src/index.html --public-url=./",
