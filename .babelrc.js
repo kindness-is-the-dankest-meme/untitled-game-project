@@ -4,4 +4,5 @@
  */
 module.exports = {
   presets: ['@babel/typescript'],
+  plugins: ['@babel/syntax-import-meta'],
 };
