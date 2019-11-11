@@ -10,9 +10,9 @@
   "license": "(MIT OR Apache-2.0)",
   "private": true,
   "engines": {
-    "node": "10.16.0",
-    "npm": "6.10.1",
-    "yarn": "1.17.3"
+    "node": "12.13.0",
+    "npm": "6.13.0",
+    "yarn": "1.19.1"
   },
   "scripts": {
     "reset": "yarn clean node_modules/ && yarn install",
