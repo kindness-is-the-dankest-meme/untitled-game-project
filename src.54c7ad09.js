@@ -6,11 +6,11 @@ parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcel
 module.exports="untitled_game_project_bg.0e8d2126.wasm";
 },{}],"jBO1":[function(require,module,exports) {
 "use strict";var e=t(require("../pkg/untitled_game_project.js"));function t(e){return e&&e.__esModule?e:{default:e}}module.exports=(0,e.default)(require("../pkg/untitled_game_project_bg.wasm"));
-},{"../pkg/wasm-loader.js":"PsEZ","../pkg/untitled_game_project.js":"OdRb","../pkg/untitled_game_project_bg.wasm":"FMio"}],"2iMt":[function(require,module,exports) {
+},{"../pkg/wasm-loader.js":"PsEZ","../pkg/untitled_game_project.js":"OdRb","../pkg/untitled_game_project_bg.wasm":"FMio"}],"iMte":[function(require,module,exports) {
 
-},{}],"7QCb":[function(require,module,exports) {
+},{}],"QCba":[function(require,module,exports) {
 "use strict";var r=require("./lib.rs");require("./style.css"),(0,r.run)();
-},{"./lib.rs":"jBO1","./style.css":"2iMt"}],0:[function(require,module,exports) {
+},{"./lib.rs":"jBO1","./style.css":"iMte"}],0:[function(require,module,exports) {
 function cacheReplace(id, mod) {
   // replace the entry in the cache with the loaded wasm module
   module.bundle.cache[id] = null;
@@ -23,5 +23,5 @@ Promise.all([
   require("./index.ts");
 });
 
-},{"./lib.rs":"jBO1","./index.ts":"7QCb"}]},{},[0], null)
+},{"./lib.rs":"jBO1","./index.ts":"QCba"}]},{},[0], null)
 //# sourceMappingURL=src.54c7ad09.js.map
