@@ -35,7 +35,7 @@
     "@semantic-release/npm": "5.3.5",
     "@semantic-release/release-notes-generator": "9.0.0",
     "@types/jest": "25.1.2",
-    "@types/node": "13.7.0",
+    "@types/node": "13.7.1",
     "babel-jest": "25.1.0",
     "commitizen": "4.0.3",
     "cz-conventional-changelog": "3.1.0",
